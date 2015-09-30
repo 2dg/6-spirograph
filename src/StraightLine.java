@@ -42,18 +42,16 @@ class AppTime {
 	static long now() {
 		return System.currentTimeMillis() - epoch;
 	}
+	static double dtime() {
+		return (double)(System.currentTimeMillis());
+	}
+	static double animatetime() {
+		return (double)(System.currentTimeMillis()) / 2000;
+	}
 }
 
 interface ParametricTransform {
 	Pair<Double> transform(double t);
-}
-
-interface CoordinateTransform extends ParametricTransform {
-	default Pair<Double> transform(double t) {
-		return new Pair<>(x(t), y(t));
-	}
-	double x(double t);
-	double y(double t);
 }
 
 interface RadiusTransform extends ParametricTransform {
@@ -65,127 +63,70 @@ interface RadiusTransform extends ParametricTransform {
 }
 
 class Polar extends JPanel {
-	static double k = 400;
+	static double k = 350;
+	static double pi_1_4 = Math.PI / 4;
+	static double pi_1_2 = Math.PI / 2;
+	static double pi_3_4 = 3 * Math.PI / 4;
 
 	static RadiusTransform sine = Math::sin;
-	static ParametricTransform lissajous$5_4 = new CoordinateTransform() {
-		@Override
-		public double x(double t) {
-			return Math.sin(5 * t);
-		}
-		@Override
-		public double y(double t) {
-			return Math.sin(4 * t);
-		}
+	static ParametricTransform lissajous$5_4 = t -> new Pair<>(
+		Math.sin(5 * t),
+		Math.sin(4 * t)
+	);
+	static ParametricTransform lol = t -> {
+		double now = AppTime.now();
+		return new Pair<>(
+			Math.sin((now + 100) * t),
+			Math.sin(now * t)
+		);
 	};
-	static ParametricTransform lol = new CoordinateTransform() {
-		@Override
-		public double x(double t) {
-			return Math.sin((AppTime.now() + 100) * t);
-		}
-		@Override
-		public double y(double t) {
-			return Math.sin(AppTime.now() * t);
-		}
-	};
+	static ParametricTransform lolS = t -> new Pair<>(
+			Math.sin((AppTime.now() + 1000) * t),
+			Math.sin((AppTime.now()) * t)
+	);
 	static ParametricTransform boom = t -> new Pair<>(
 		Math.sin((AppTime.now() + 20) * t),
 		Math.sin((AppTime.now()) * t)
 	);
 	static ParametricTransform rise = t -> new Pair<>(
-			Math.sin((double)(AppTime.now()) / 10 * t),
-			Math.sin(t)
+		Math.sin((double)(AppTime.now()) / 10 * t),
+		Math.sin(t)
 	);
-	static ParametricTransform lolS = new CoordinateTransform() {
-		@Override
-		public double x(double t) {
-			return Math.sin((AppTime.now() + 1000) * t);
-		}
-		@Override
-		public double y(double t) {
-			return Math.sin(AppTime.now() * t);
-		}
+	static ParametricTransform swarm = t -> new Pair<>(
+		Math.sin(5 * t),
+		Math.sin(AppTime.dtime() / 20000 * t)
+	);
+	static ParametricTransform oscillate = t -> new Pair<>(
+		Math.sin(5 * t),
+		Math.sin(AppTime.animatetime() * t)
+	);
+	static ParametricTransform castle = t -> {
+		double nowslow = AppTime.animatetime();
+		return new Pair<>(
+			Math.sin(5 * t + nowslow),
+			Math.sin(nowslow * t)
+		);
 	};
-	static ParametricTransform swarm = new CoordinateTransform() {
-		@Override
-		public double x(double t) {
-			return Math.sin(5 * t);
-		}
-		@Override
-		public double y(double t) {
-			return Math.sin((double)(System.currentTimeMillis()) / 20000 * t);
-		}
-	};
-	static ParametricTransform oscillate = new CoordinateTransform() {
-		@Override
-		public double x(double t) {
-			return Math.sin(5 * t);
-		}
-		@Override
-		public double y(double t) {
-			return Math.sin((double)(System.currentTimeMillis()) / 2000 * t);
-		}
-	};
-	static ParametricTransform castle = new CoordinateTransform() {
-		@Override
-		public double x(double t) {
-			return Math.sin(5 * t + ((double)(System.currentTimeMillis()) / 20000));
-		}
-		@Override
-		public double y(double t) {
-			return Math.sin((double)(System.currentTimeMillis()) / 20000 * t);
-		}
-	};
-	static ParametricTransform flux = new CoordinateTransform() {
-		@Override
-		public double x(double t) {
-			return Math.sin(5 * t);
-		}
-		@Override
-		public double y(double t) {
-			return Math.sin(System.currentTimeMillis() * t);
-		}
-	};
-	static ParametricTransform lissajous$10_9 = new CoordinateTransform() {
-		@Override
-		public double x(double t) {
-			return Math.sin(10 * t + (double)(System.currentTimeMillis()) / 2000);
-		}
-		@Override
-		public double y(double t) {
-			return Math.sin(9 * t);
-		}
-	};
-	static ParametricTransform lissajous$10_9_1 = new CoordinateTransform() {
-		@Override
-		public double x(double t) {
-			return Math.sin(10 * t + Math.PI / 4 + (double)(System.currentTimeMillis()) / 2000);
-		}
-		@Override
-		public double y(double t) {
-			return Math.sin(9 * t);
-		}
-	};
-	static ParametricTransform lissajous$10_9_2 = new CoordinateTransform() {
-		@Override
-		public double x(double t) {
-			return Math.sin(10 * t + Math.PI / 2 + (double)(System.currentTimeMillis()) / 2000);
-		}
-		@Override
-		public double y(double t) {
-			return Math.sin(9 * t);
-		}
-	};
-	static ParametricTransform lissajous$10_9_3 = new CoordinateTransform() {
-		@Override
-		public double x(double t) {
-			return Math.sin(10 * t + 3 * Math.PI / 4 + (double)(System.currentTimeMillis()) / 2000);
-		}
-		@Override
-		public double y(double t) {
-			return Math.sin(9 * t);
-		}
-	};
+	static ParametricTransform flux = t -> new Pair<>(
+		Math.sin(5 * t),
+		Math.sin(System.currentTimeMillis() * t)
+	);
+	static ParametricTransform lissajous$10_9 = t -> new Pair<>(
+		Math.sin(10 * t + AppTime.animatetime()),
+		Math.sin(9 * t)
+	);
+	static ParametricTransform lissajous$10_9_1 = t -> new Pair<>(
+		Math.sin(10 * t + pi_1_4 + AppTime.animatetime()),
+		Math.sin(9 * t)
+	);
+	static ParametricTransform lissajous$10_9_2 = t -> new Pair<>(
+		Math.sin(10 * t + pi_1_2 + AppTime.animatetime()),
+		Math.sin(9 * t)
+	);
+	static ParametricTransform lissajous$10_9_3 = t -> new Pair<>(
+			Math.sin(10 * t + pi_3_4 + AppTime.animatetime()),
+			Math.sin(9 * t)
+	);
 
 	void plot(Polygon p, double x, double y) {
 		p.addPoint((int)(500 + k * x), (int)(500 - k * y));
@@ -209,32 +150,54 @@ class Polar extends JPanel {
 		Graphics2D g = (Graphics2D)(gg);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		g.drawLine(0, 500, 1000, 500);
-		g.drawLine(500, 0, 500, 1000);
+		// grid
+		// g.drawLine(0, 500, 1000, 500);
+		// g.drawLine(500, 0, 500, 1000);
 
-//		g.setColor(Color.BLUE);
-//		plotFn(g, 1, 600, castle);
+		// animate scale
+		k = Math.abs(Math.sin(AppTime.animatetime())) * 150 + 100;
 
-//		g.setColor(Color.BLUE);
-//		plotFn(g, 1, 1000, castle);
+		int mode = 6;
+		switch (mode) {
+			case 0:
+				g.setColor(Color.BLUE);
+				plotFn(g, 1, 100, sine);
+				break;
+			case 1:
+				g.setColor(Color.BLUE);
+				plotFn(g, 1, 600, lissajous$5_4);
+				break;
+			case 2:
+				g.setColor(Color.BLUE);
+				plotFn(g, 1, 1000, castle);
+				break;
+			case 3:
+				g.setColor(Color.BLUE);
+				plotFn(g, 1, 600, castle);
+				break;
+			case 4:
+				g.setColor(Color.BLUE);
+				plotFn(g, 1, 600, lol);
+				break;
+			case 6:
+				g.setColor(Color.GREEN);
+				plotFn(g, 1, 600, lissajous$10_9_1);
 
-		g.setColor(Color.BLUE);
-		plotFn(g, 1, 600, lol);
+				g.setColor(Color.RED);
+				plotFn(g, 1, 600, lissajous$10_9_2);
 
-//		g.setColor(Color.BLUE);
-//		plotFn(g, 1, 600, lissajous$10_9);
-//
-//		g.setColor(Color.GREEN);
-//		plotFn(g, 1, 600, lissajous$10_9_1);
-//
-//		g.setColor(Color.RED);
-//		plotFn(g, 1, 600, lissajous$10_9_2);
-//
-//		g.setColor(Color.ORANGE);
-//		plotFn(g, 1, 600, lissajous$10_9_3);
+				g.setColor(Color.ORANGE);
+				plotFn(g, 1, 600, lissajous$10_9_3);
+			case 5:
+				g.setColor(Color.BLUE);
+				plotFn(g, 1, 600, lissajous$10_9);
+				break;
+			default:
+				break;
+		}
+
 	}
 }
-
 
 class Rectangular extends JPanel {
 	static double k = 50;
